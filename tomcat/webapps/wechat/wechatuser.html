@@ -1,0 +1,31 @@
+<table id="table_user" data-toggle="table" data-striped=true>
+	<thead>
+        <tr>
+        	<th data-field="rid" data-checkbox=true></th>
+            <th data-field="openid">openid</th>
+            <th data-field="subscribe">公众号关注</th>
+            <th data-field="subscribe_time">关注时间</th>
+            <th data-field="nickname">昵称</th>
+            <th data-field="sex">性别</th>
+            <th data-field="city">城市</th>
+            <th data-field="country">国家</th>
+            <th data-field="province">省份</th>
+            <th data-field="headimgurl">头像</th>
+            <th data-field="unionid">unionid</th>
+            <th data-field="remark">备注</th>
+            <th data-field="groupid">分组</th>
+            <th data-field="tagid_list">标签列表</th>
+            <th data-field="black">是否拉黑</th>
+            <th data-field="black_time">拉黑时间</th>
+        </tr>
+    </thead>
+</table>
+<script>
+$(document).ready(function () {
+	$.get("async/wechat/getuser?nonce="+Math.random(),function(data){
+        $('#table_user').bootstrapTable({
+		    data: data.data
+		});
+	});
+});
+</script>

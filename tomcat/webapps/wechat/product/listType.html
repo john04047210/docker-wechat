@@ -1,0 +1,89 @@
+<div id="toolbar">
+    <button id="addClassify" class="btn btn-primary">添加分类</button>
+</div>
+<table id="table_listtype" data-toggle="table" data-striped=true
+       data-toolbar="#addClassify">
+    <thead>
+    <tr>
+        <th data-field="rid" data-checkbox=false data-valign="middle" data-width="80">显示顺序</th>
+        <th data-field="img" data-formatter="imgFormatter" data-width="100">图片</th>
+        <th data-field="title" data-valign="middle">分类标题</th>
+        <th data-field="title2" data-valign="middle">分类副标题</th>
+        <th data-field="option" data-formatter="optionFormatter" data-valign="middle">操作</th>
+    </tr>
+    </thead>
+</table>
+<script>
+    var $table = $('#table_listtype'),
+            $addButton = $('#addClassify');
+
+    $(function () {
+        $addButton.click(function () {
+            showDiv(-1);
+        });
+    });
+
+    function imgFormatter(value, row, index) {
+        return '<img src="'+value+'" alt="'+row.title+'" class="img-rounded" width="100" height="100" /> ';
+    }
+    function optionFormatter(value, row, index) {
+        return '<div class="btn-group" role="group" style="margin-bottom: 4px">'+
+                '<button id="deltype'+row.rid+'" type="button" class="btn btn-danger btn-sm active" onclick="showDiv('+index+');">删除</button>'+
+                '<button id="upttype'+row.rid+'" type="button" class="btn btn-primary btn-sm" onclick="showDiv('+index+');">更新</button>'+
+                '</div>';
+    }
+    function showDiv(index) {
+        var title = '新增分类信息';
+        var data = '';
+        if(index >= 0) {
+            data = $table.bootstrapTable('getData')[index];
+            title = '分类更新:'+data.title;
+        }
+        $.get("product/listTypeDlg.html?nonce="+Math.random(),function(data){
+            $('#myModal').html(data);
+            $('#myModal').modal('show');
+        });
+        $('#myModal').on('shown.bs.modal', function (e) {
+            $('#modelTitle').text(title);
+            if(index >= 0) {
+                $("#inputImg").attr('src',data.img);
+                $('#inputOrder').val(data.rid);
+                $('#inputTitle').val(data.title);
+                $('#inputTitle2').val(data.title2);
+            }
+            $saveButton = $('#saveClassify');
+            $saveButton.click(function () {
+                var imgurl = $("#inputImg")[0].src;
+                var order = $('#inputOrder').val();
+                var title = $('#inputTitle').val();
+                var title2 = $('#inputTitle2').val();
+                $param = {'inputImg':imgurl,'inputOrder':order,'inputTitle':title,'inputTitle2':title2};
+                $.post("async/product/addListType",$param,function (data) {
+                    if(0 == data.code) {
+                        // 追加分类成功
+                        $table.bootstrapTable('insertRow',{
+                            index: order,
+                            row: {
+                                rid: order,
+                                img: imgurl,
+                                title: title,
+                                title2: title2,
+                                option: ''
+                            }
+                        });
+                    }
+                });
+            });
+        })
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            $('#myModal').html('');
+        })
+    }
+    $(document).ready(function () {
+        $.get("async/product/getListType?nonce="+Math.random(),function(data){
+            $('#table_listtype').bootstrapTable({
+                data: data.data
+            });
+        });
+    });
+</script>

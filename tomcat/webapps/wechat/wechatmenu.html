@@ -1,0 +1,36 @@
+<form id="menu_form" role="form">
+    <div class="form-group">
+        <label for="menu_text">自定义菜单json内容</label>
+        <textarea class="form-control" id="menu_text" rows="30"></textarea>
+    </div>
+    <button type="button" id="menu_submit" class="btn btn-primary">提交</button>
+</form>
+<!--<table id="table_user" data-toggle="table" data-striped=true>
+	<thead>
+        <tr>
+            <th data-field="button">一级菜单</th>
+            <th data-field="sub_button">二级菜单</th>
+            <th data-field="type">动作类型</th>
+            <th data-field="name">标题</th>
+            <th data-field="key">KEY值</th>
+            <th data-field="url">链接</th>
+        </tr>
+    </thead>
+</table>-->
+<script>
+  $(document).ready(function () {
+	$.get("/async/wechat/menu?method=get&nonce="+Math.random(),function(data){
+        $('#menu_text').val(data.data);
+	});
+  });
+  $('#menu_submit').on("click",function(){
+    var $btn = $(this).button("loading...");
+    var form_data = {
+        "menu_text":$('#menu_text').val()
+    }
+    $.post("/async/wechat/menu?method=create",form_data,function(data){
+        alert(data);
+        $btn.button("reset");
+    });
+  })
+</script>

@@ -1,0 +1,26 @@
+{
+  "button":[
+    {
+      "type":"click",
+      "name":"今日歌曲",
+      "key":"sign"
+    },
+    {
+      "name":"菜单",
+      "sub_button":[
+      {
+        "type":"view",
+        "name":"搜索",
+        "url":"http://wechat.shilikaif.com/xiyifu/index.html"
+      },{
+        "type":"view",
+        "name":"视频",
+        "url":"http://wechat.shilikaif.com/xiyifu/example.html"
+      },{
+        "type":"click",
+        "name":"赞一下我们",
+        "key":"V1001_GOOD"
+      }]
+    }
+  ]
+}

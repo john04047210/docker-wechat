@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>WeUI</title>
+  <link rel="stylesheet" href="../weui/css/weui.min.css"/>
+</head>
+<body ontouchstart>
+<div class="container" id="container">
+  <div class="weui_cells_title">带说明的列表项</div>
+  <div class="weui_cells">
+    <div class="weui_cell">
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>标题文字</p>
+      </div>
+      <div class="weui_cell_ft">
+        说明文字
+      </div>
+    </div>
+  </div>
+  <div class="weui_cells_title">带图标、说明、跳转的列表项</div>
+  <div class="weui_cells weui_cells_access">
+    <a class="weui_cell" href="#">
+      <div class="weui_cell_hd">
+        <!--<img src="" alt="icon" style="width:20px;margin-right:5px;display:block">-->
+        <i class="weui_icon_info_circle"></i>
+      </div>
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>cell standard</p>
+      </div>
+      <div class="weui_cell_ft">
+        说明文字
+      </div>
+    </a>
+    <a class="weui_cell" href="#">
+      <div class="weui_cell_hd">
+        <!--<img src="" alt="icon" style="width:20px;margin-right:5px;display:block">-->
+        <i class="weui_icon_info_circle"></i>
+      </div>
+      <div class="weui_cell_bd weui_cell_primary">
+        <p>cell standard</p>
+      </div>
+      <div class="weui_cell_ft">
+        说明文字
+      </div>
+    </a>
+  </div>
+  <i class="weui_icon_msg weui_icon_success"></i>
+  <i class="weui_icon_msg weui_icon_info"></i>
+  <i class="weui_icon_msg weui_icon_warn"></i>
+  <i class="weui_icon_msg weui_icon_waiting"></i>
+  <i class="weui_icon_safe weui_icon_safe_success"></i>
+  <i class="weui_icon_safe weui_icon_safe_warn"></i>
+  <div class="icon_sp_area">
+    <i class="weui_icon_success"></i>
+    <i class="weui_icon_success_circle"></i>
+    <i class="weui_icon_success_no_circle"></i>
+    <i class="weui_icon_info"></i>
+    <i class="weui_icon_waiting"></i>
+    <i class="weui_icon_waiting_circle"></i>
+    <i class="weui_icon_circle"></i>
+    <i class="weui_icon_warn"></i>
+    <i class="weui_icon_download"></i>
+    <i class="weui_icon_info_circle"></i>
+    <i class="weui_icon_cancel"></i>
+  </div>
+  <a href="#" id="button" class="weui_btn weui_btn_primary">按钮</a>
+</div>
+<script src="../../assets/js/jquery-1.10.2.js"></script>
+<script src="../../assets/js/jquery.cookie.js"></script>
+<script>
+  (function ($) {
+    "use strict";
+    var mainApp = {
+      checkClient: function () {
+        var ua = navigator.userAgent.toLowerCase();
+        var isWeixin = ua.indexOf('micromessenger') != -1;
+        var isAndroid = ua.indexOf('android') != -1;
+        var isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);
+        return isWeixin;
+      },
+      checkSession:function() {
+        $.cookie('oriurl', location.href, { path: '/' });
+        $.get("/wechat/async/wechat/weui/check?redirect="+location.href+"&nonce="+Math.random(),function(data){
+          var href = data.data.href;
+          if(href!='') {
+            if(href != $.cookie('oriurl')) {
+              location.href = href;
+            }
+          }
+        });
+      },
+      initEvent: function() {
+        $('#button').on("click",function(){
+          mainApp.checkSession();
+        })
+      }
+    }
+
+    $(document).ready(function () {
+      if(!mainApp.checkClient()) {
+        location.href="error.html";
+        return;
+      }
+      mainApp.initEvent();
+    });
+  }(jQuery));
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0"
+         metadata-complete="true">
+
+    <!-- 账户后台管理配置信息 -->
+    <servlet>
+        <servlet-name>wechat/ssmp</servlet-name>
+        <servlet-class>com.qiku.qiaopeng.wechat.servlet.WechatServlet</servlet-class>
+        <async-supported>true</async-supported>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>wechat/ssmp</servlet-name>
+        <!-- 管理系统登录 -->
+        <url-pattern>/async/reqinfo</url-pattern>
+        <!-- 手动刷新微信token-->
+        <url-pattern>/async/wechat/refresh</url-pattern>
+        <!-- 获取已关注公众号的用户信息-->
+        <url-pattern>/async/wechat/getuser</url-pattern>
+        <!-- 到微信刷新绑定用户的最新资料信息-->
+        <url-pattern>/async/wechat/refuserinfo</url-pattern>
+        <!-- 微信自定义菜单-->
+        <url-pattern>/async/wechat/menu</url-pattern>
+
+        <!-- 检查微信客户端JSESSION-->
+        <url-pattern>/async/wechat/weui/check</url-pattern>
+        <!-- code换token-->
+        <url-pattern>/async/wechat/weui/callback</url-pattern>
+        <!-- code换token 小程序-->
+        <url-pattern>/async/wechat/wemp/callback</url-pattern>
+
+        <!-- 微信转发消息专用-->
+        <url-pattern>/message</url-pattern>
+
+        <!-- 获取衣物分类信息-->
+        <url-pattern>/async/product/getListType</url-pattern>
+        <!-- 新加衣物分类信息-->
+        <url-pattern>/async/product/addListType</url-pattern>
+        <!-- 获取衣物管理信息-->
+        <url-pattern>/async/product/getList</url-pattern>
+    </servlet-mapping>
+
+
+    <session-config>
+        <!-- 单位：分钟 -->
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
+
+</web-app>

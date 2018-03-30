@@ -1,0 +1,86 @@
+<div>
+	<ul id="listparent" class="list-inline list-unstyled list-group">
+	</ul>
+</div>
+<script>
+//(function ($) {
+    var param = {
+    		global:[]
+    	};
+
+    function showDiv(index) {
+        var title = '编辑商品';
+        var data = '';
+        if(index >= 0) {
+            data = param.global[index];
+            title = '编辑商品:'+data.alice;
+        }
+        $.get("product/listDlg.html?nonce="+Math.random(),function(data){
+            $('#myModal').html(data);
+            $('#myModal').modal('show');
+        });
+        $('#myModal').on('shown.bs.modal', function (e) {
+            $('#modelTitle').text(title);
+            if(index >= 0) {
+                $("#inputImg").attr('src',data.img);
+                $('#inputName').val(data.alice);
+                $('#inputPrice').val(data.price);
+                $('#inputUnit').val('件');
+                $('#inputType').val(data.typeid);
+                $('#inputOrder').val(data.classid);
+                $('#hangFlag').val(0);
+                $('#discountFlag').val(1);
+            }
+            $saveButton = $('#saveClassify');
+            $saveButton.click(function () {
+                var imgurl = $("#inputImg")[0].src;
+                var order = $('#inputOrder').val();
+                var title = $('#inputTitle').val();
+                var title2 = $('#inputTitle2').val();
+                $param = {'inputImg':imgurl,'inputOrder':order,'inputTitle':title,'inputTitle2':title2};
+                $.post("async/product/addList",$param,function (data) {
+                    if(0 == data.code) {
+                        // 追加分类成功
+                        $table.bootstrapTable('insertRow',{
+                            index: order,
+                            row: {
+                                rid: order,
+                                img: imgurl,
+                                title: title,
+                                title2: title2,
+                                option: ''
+                            }
+                        });
+                    }
+                });
+            });
+        })
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            $('#myModal').html('');
+        })
+    }
+
+	$(document).ready(function () {
+		var liFormat = 
+		'<li>'+
+	      '<div class="thumbnail">'+
+		    '<img src="{0}" alt="..." class="img-rounded" width="100" height="100">'+
+		    '<div class="caption"><h5>{1}</h5><div style="margin-top:10px;"><span>&yen;{2}</span>'+
+		    '<button type="button" class="btn btn-primary btn-xs pull-right" onclick="showDiv({3});">变更</button></div>'+
+		    '</div>'+
+		  '</div>'+
+	    '</li>';
+        $.get("async/product/getList?nonce="+Math.random(),function(data){
+        	if(0 == data.code) {
+        		var list = data.data;
+        		param.global = list;
+        		for( var i=0; i<list.length; i++) {
+        			var obj = list[i];
+        			var li = StringFormat(liFormat,obj.img,obj.alice,obj.price,i);
+        			$('#listparent').append(li);
+        		}
+        	}
+        });
+    });
+//}(jQuery));
+</script>
