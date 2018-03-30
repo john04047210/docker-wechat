@@ -4,14 +4,14 @@ services:
   web_1:
     restart: "no"
     image: tomcat
-  volumes:
-    - "./tomcat/webapps:/usr/local/tomcat/webapps"
+    volumes:
+      - "./tomcat/webapps:/usr/local/tomcat/webapps"
 
   web_2:
     restart: "no"
     image: tomcat
-  volumes:
-    - "./tomcat/webapps:/usr/local/tomcat/webapps"
+    volumes:
+      - "./tomcat/webapps:/usr/local/tomcat/webapps"
 
   nginx:
     restart: "no"
